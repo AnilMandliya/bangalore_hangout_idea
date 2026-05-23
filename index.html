@@ -68,7 +68,7 @@
       }
     }
 
-    /* PARTICLES */
+    /* FLOATING PARTICLES */
 
     .particles{
       position:absolute;
@@ -122,7 +122,7 @@
 
     .title{
       text-align:center;
-      margin-bottom:30px;
+      margin-bottom:24px;
     }
 
     .title h1{
@@ -165,35 +165,109 @@
     .game-board{
       position:relative;
 
-      width:min(90vw,650px);
-      height:min(90vw,650px);
+      width:min(95vw,1100px);
+      height:min(72vh,700px);
+
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+
+      gap:40px;
+
+      margin-bottom:20px;
+    }
+
+    /* PLAYER */
+
+    .player{
+      position:relative;
+
+      width:180px;
+      height:220px;
+
+      flex-shrink:0;
 
       display:flex;
       align-items:center;
       justify-content:center;
-
-      margin-bottom:30px;
     }
 
-    .ring{
+    .body{
       position:absolute;
+
+      width:90px;
+      height:140px;
+
+      border-radius:35px 35px 20px 20px;
+
+      background:
+      linear-gradient(
+        180deg,
+        #111827,
+        #0f172a
+      );
+
+      border:2px solid rgba(255,255,255,.1);
+
+      box-shadow:
+      0 0 25px rgba(57,243,255,.25),
+      inset 0 0 20px rgba(255,255,255,.05);
+    }
+
+    .body::before{
+      content:"";
+
+      position:absolute;
+
+      top:-48px;
+      left:50%;
+
+      transform:translateX(-50%);
+
+      width:50px;
+      height:50px;
+
       border-radius:50%;
-      border:1px solid rgba(255,255,255,.08);
+
+      background:#f5d0c5;
     }
 
-    .ring1{
-      width:100%;
-      height:100%;
+    .arm{
+      position:absolute;
+
+      top:85px;
+      right:-20px;
+
+      width:90px;
+      height:14px;
+
+      border-radius:20px;
+
+      background:#f5d0c5;
+
+      transform-origin:left center;
+      transform:rotate(0deg);
+
+      box-shadow:0 0 10px rgba(255,255,255,.2);
     }
 
-    .ring2{
-      width:80%;
-      height:80%;
+    .player.throw .arm{
+      animation:throwArm .7s ease;
     }
 
-    .ring3{
-      width:60%;
-      height:60%;
+    @keyframes throwArm{
+
+      0%{
+        transform:rotate(0deg);
+      }
+
+      30%{
+        transform:rotate(-40deg);
+      }
+
+      100%{
+        transform:rotate(35deg);
+      }
     }
 
     /* MAP */
@@ -201,12 +275,10 @@
     .map{
       position:relative;
 
-      width:75%;
-      height:75%;
+      width:min(70vw,700px);
+      height:min(70vw,700px);
 
-      border-radius:
-      42% 58% 63% 37% /
-      35% 39% 61% 65%;
+      border-radius:50%;
 
       background:
       linear-gradient(
@@ -222,8 +294,10 @@
       overflow:hidden;
 
       box-shadow:
-      0 0 35px rgba(57,243,255,.25),
-      inset 0 0 25px rgba(255,255,255,.05);
+      0 0 40px rgba(57,243,255,.25),
+      inset 0 0 30px rgba(255,255,255,.05);
+
+      flex-shrink:0;
     }
 
     .map::before{
@@ -249,6 +323,33 @@
       }
     }
 
+    /* DARTBOARD RINGS */
+
+    .ring{
+      position:absolute;
+      border-radius:50%;
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .ring1{
+      width:100%;
+      height:100%;
+    }
+
+    .ring2{
+      width:75%;
+      height:75%;
+      top:12.5%;
+      left:12.5%;
+    }
+
+    .ring3{
+      width:50%;
+      height:50%;
+      top:25%;
+      left:25%;
+    }
+
     /* HOTSPOTS */
 
     .hotspot{
@@ -270,6 +371,8 @@
       box-shadow:0 0 20px var(--cyan);
 
       transition:.3s;
+
+      z-index:5;
     }
 
     .hotspot:hover{
@@ -309,116 +412,18 @@
     .label{
       position:absolute;
 
+      top:24px;
       left:50%;
+
       transform:translateX(-50%);
 
-      margin-top:22px;
-
       font-size:.72rem;
+
       white-space:nowrap;
 
       color:white;
+
       opacity:.85;
-    }
-
-    /* PLAYER */
-
-    .player{
-      position:absolute;
-
-      bottom:-10px;
-      left:50%;
-
-      transform:translateX(-50%);
-
-      width:120px;
-      height:160px;
-
-      z-index:20;
-      pointer-events:none;
-    }
-
-    .body{
-      position:absolute;
-
-      bottom:0;
-      left:50%;
-
-      transform:translateX(-50%);
-
-      width:70px;
-      height:110px;
-
-      border-radius:30px 30px 15px 15px;
-
-      background:
-      linear-gradient(
-        180deg,
-        #111827,
-        #0f172a
-      );
-
-      border:2px solid rgba(255,255,255,.1);
-
-      box-shadow:
-      0 0 20px rgba(57,243,255,.25),
-      inset 0 0 20px rgba(255,255,255,.05);
-    }
-
-    .body::before{
-      content:"";
-
-      position:absolute;
-
-      top:-42px;
-      left:50%;
-
-      transform:translateX(-50%);
-
-      width:42px;
-      height:42px;
-
-      border-radius:50%;
-
-      background:#f5d0c5;
-    }
-
-    .arm{
-      position:absolute;
-
-      top:35px;
-      right:5px;
-
-      width:65px;
-      height:12px;
-
-      border-radius:20px;
-
-      background:#f5d0c5;
-
-      transform-origin:left center;
-      transform:rotate(-20deg);
-
-      box-shadow:0 0 10px rgba(255,255,255,.2);
-    }
-
-    .player.throw .arm{
-      animation:throwArm .8s ease;
-    }
-
-    @keyframes throwArm{
-
-      0%{
-        transform:rotate(-20deg);
-      }
-
-      35%{
-        transform:rotate(-120deg);
-      }
-
-      100%{
-        transform:rotate(15deg);
-      }
     }
 
     /* DART */
@@ -426,16 +431,18 @@
     .dart{
       position:absolute;
 
-      bottom:120px;
-      left:50%;
+      left:170px;
+      top:50%;
 
-      transform:translateX(-50%);
+      transform:
+      translateY(-50%)
+      rotate(0deg);
 
       font-size:46px;
 
       opacity:0;
 
-      z-index:30;
+      z-index:20;
 
       filter:
       drop-shadow(0 0 12px rgba(255,255,255,.9))
@@ -507,34 +514,6 @@
       0 0 50px rgba(139,92,246,.3);
 
       transition:.25s;
-    }
-
-    .throw-btn::before{
-      content:"";
-
-      position:absolute;
-      inset:0;
-
-      background:
-      linear-gradient(
-        90deg,
-        transparent,
-        rgba(255,255,255,.3),
-        transparent
-      );
-
-      transform:translateX(-100%);
-    }
-
-    .throw-btn:hover::before{
-      animation:shine 1s linear;
-    }
-
-    @keyframes shine{
-
-      to{
-        transform:translateX(100%);
-      }
     }
 
     .throw-btn:hover{
@@ -634,11 +613,6 @@
       background:rgba(255,255,255,.08);
 
       overflow:hidden;
-
-      border:1px solid rgba(255,255,255,.08);
-
-      box-shadow:
-      inset 0 0 10px rgba(255,255,255,.05);
     }
 
     .happiness-fill{
@@ -654,10 +628,6 @@
         #8b5cf6,
         #39f3ff
       );
-
-      box-shadow:
-      0 0 20px rgba(255,79,216,.8),
-      0 0 40px rgba(57,243,255,.5);
 
       transition:width 1s cubic-bezier(.16,1,.3,1);
     }
@@ -687,8 +657,6 @@
       cursor:pointer;
 
       font-weight:bold;
-
-      transition:.25s;
     }
 
     .again{
@@ -701,12 +669,6 @@
       color:black;
     }
 
-    .small-btn:hover{
-      transform:translateY(-2px) scale(1.03);
-    }
-
-    /* RARE EVENT */
-
     .rare{
       margin-top:16px;
 
@@ -717,36 +679,38 @@
       background:rgba(255,79,216,.12);
 
       border:1px solid rgba(255,79,216,.25);
-
-      animation:rareGlow 1.5s infinite alternate;
-    }
-
-    @keyframes rareGlow{
-
-      from{
-        box-shadow:0 0 10px rgba(255,79,216,.2);
-      }
-
-      to{
-        box-shadow:0 0 30px rgba(255,79,216,.6);
-      }
     }
 
     /* MOBILE */
 
-    @media(max-width:768px){
+    @media(max-width:900px){
+
+      body{
+        overflow:auto;
+      }
 
       .game-board{
-        width:95vw;
-        height:95vw;
+        flex-direction:column;
+        height:auto;
+        gap:20px;
+      }
+
+      .map{
+        width:90vw;
+        height:90vw;
+      }
+
+      .player{
+        transform:scale(.8);
+      }
+
+      .dart{
+        left:50%;
+        top:120px;
       }
 
       .throw-btn{
         width:90%;
-      }
-
-      .card{
-        padding:22px;
       }
     }
 
@@ -759,82 +723,80 @@
 
   <div class="container">
 
-    <!-- HEADER -->
-
     <div class="title">
       <h1>Bengaluru Hangout Dart</h1>
-      <p>Let the city decide our next hangout place.</p>
+      <p>Let the city decide your next Hangout.</p>
     </div>
 
     <!-- GAME BOARD -->
 
     <div class="game-board">
 
-      <div class="ring ring1"></div>
-      <div class="ring ring2"></div>
-      <div class="ring ring3"></div>
-
-      <!-- MAP -->
-
-      <div class="map" id="map">
-
-        <!-- HOTSPOTS -->
-
-<div class="hotspot"
-data-area="Koramangala"
-style="top:55%; left:40%;">
-<div class="label">Koramangala</div>
-</div>
-
-<div class="hotspot"
-data-area="Indiranagar"
-style="top:35%; left:65%;">
-<div class="label">Indiranagar</div>
-</div>
-
-<div class="hotspot"
-data-area="HSR Food Street"
-style="top:72%; left:52%;">
-<div class="label">HSR Food Street</div>
-</div>
-
-<div class="hotspot"
-data-area="MG Road"
-style="top:48%; left:72%;">
-<div class="label">MG Road</div>
-</div>
-
-<div class="hotspot"
-data-area="Church Street"
-style="top:42%; left:56%;">
-<div class="label">Church Street</div>
-</div>
-
-<div class="hotspot"
-data-area="JP Nagar"
-style="top:68%; left:28%;">
-<div class="label">JP Nagar</div>
-</div>
-
-<div class="hotspot"
-data-area="Sarjapur"
-style="top:64%; left:76%;">
-<div class="label">Sarjapur</div>
-</div>
-
-<div class="hotspot"
-data-area="Cubbon Park"
-style="top:30%; left:45%;">
-<div class="label">Cubbon Park</div>
-</div>
-
-      </div>
-
       <!-- PLAYER -->
 
       <div class="player" id="player">
         <div class="arm"></div>
         <div class="body"></div>
+      </div>
+
+      <!-- MAP -->
+
+      <div class="map" id="map">
+
+        <div class="ring ring1"></div>
+        <div class="ring ring2"></div>
+        <div class="ring ring3"></div>
+
+        <!-- HOTSPOTS -->
+
+        <div class="hotspot"
+          data-area="Koramangala"
+          style="top:55%; left:35%;">
+          <div class="label">Koramangala</div>
+        </div>
+
+        <div class="hotspot"
+          data-area="Indiranagar"
+          style="top:32%; left:68%;">
+          <div class="label">Indiranagar</div>
+        </div>
+
+        <div class="hotspot"
+          data-area="HSR Food Street"
+          style="top:72%; left:52%;">
+          <div class="label">HSR Food Street</div>
+        </div>
+
+        <div class="hotspot"
+          data-area="MG Road"
+          style="top:48%; left:74%;">
+          <div class="label">MG Road</div>
+        </div>
+
+        <div class="hotspot"
+          data-area="Church Street"
+          style="top:42%; left:58%;">
+          <div class="label">Church Street</div>
+        </div>
+
+        <div class="hotspot"
+          data-area="JP Nagar"
+          style="top:68%; left:28%;">
+          <div class="label">JP Nagar</div>
+        </div>
+
+        <div class="hotspot"
+          data-area="Sarjapur"
+          style="top:64%; left:80%;">
+          <div class="label">Sarjapur</div>
+        </div>
+
+        <div class="hotspot"
+          data-area="Cubbon Park"
+          style="top:26%; left:44%;">
+          <div class="label">Cubbon Park</div>
+        </div>
+
       </div>
 
       <!-- DART -->
@@ -903,119 +865,119 @@ style="top:30%; left:45%;">
   <script>
 
     /* DATE IDEAS */
-
     const dateIdeas = [
 
-  {
-    title:"Dessert Crawl",
-    area:"Indiranagar",
-    vibe:"Sweet",
-    happiness:94,
-    emoji:"🍰",
-    description:"Try multiple dessert spots and rate them like food critics."
-  },
+{
+  title:"Dessert Crawl",
+  area:"Indiranagar",
+  vibe:"Sweet",
+  happiness:94,
+  emoji:"🍰",
+  description:"Try multiple dessert spots and rate them like food critics."
+},
 
-  {
-    title:"Bookstore Hangout",
-    area:"Church Street",
-    vibe:"Soft",
-    happiness:88,
-    emoji:"📚",
-    description:"Pick books for each other and judge covers dramatically."
-  },
+{
+  title:"Bookstore Hangout",
+  area:"Church Street",
+  vibe:"Soft",
+  happiness:88,
+  emoji:"📚",
+  description:"Pick books for each other and judge covers dramatically."
+},
 
-  {
-    title:"Mini Photoshoot Walk",
-    area:"Church Street",
-    vibe:"Aesthetic",
-    happiness:90,
-    emoji:"📸",
-    description:"Take candid  photos while walking"
-  },
+{
+  title:"Mini Photoshoot Walk",
+  area:"Church Street",
+  vibe:"Aesthetic",
+  happiness:90,
+  emoji:"📸",
+  description:"Take candid  photos while walking"
+},
 
-  {
-    title:"Sunset Walk",
-    area:"Cubbon Park",
-    vibe:"Peaceful",
-    happiness:97,
-    emoji:"🌇",
-    description:"Slow walk under giant trees with chai in hand."
-  },
+{
+  title:"Sunset Walk",
+  area:"Cubbon Park",
+  vibe:"Peaceful",
+  happiness:97,
+  emoji:"🌇",
+  description:"Slow walk under giant trees with chai in hand."
+},
 
-  {
-    title:"Chai & Deep Talks",
-    area:"Cubbon Park",
-    vibe:"Wholesome",
-    happiness:93,
-    emoji:"🍵",
-    description:"Sit under the trees and talk about life, dreams, and random nonsense."
-  },
+{
+  title:"Chai & Deep Talks",
+  area:"Cubbon Park",
+  vibe:"Wholesome",
+  happiness:93,
+  emoji:"🍵",
+  description:"Sit under the trees and talk about life, dreams, and random nonsense."
+},
 
-  {
-    title:"Metro Adventure",
-    area:"MG Road",
-    vibe:"Spontaneous",
-    happiness:85,
-    emoji:"🚇",
-    description:"Take random metro stops and explore together."
-  },
+{
+  title:"Metro Adventure",
+  area:"MG Road",
+  vibe:"Spontaneous",
+  happiness:85,
+  emoji:"🚇",
+  description:"Take random metro stops and explore together."
+},
 
-  {
-    title:"Midnight Ice Cream Ride",
-    area:"Koramangala",
-    vibe:"Cute",
-    happiness:96,
-    emoji:"🍦",
-    description:"Ride around the city hunting for the best midnight ice cream."
-  },
-
-
-  {
-    title:"Food Street Feast",
-    area:"HSR Food Street",
-    vibe:"Chaotic Fun",
-    happiness:95,
-    emoji:"🌮",
-    description:"Try momos, desserts, and random street food together."
-  },
-
-  {
-    title:"Street Food Challenge",
-    area:"HSR Food Street",
-    vibe:"Fun",
-    happiness:89,
-    emoji:"🍜",
-    description:"Each person picks one random food stall for the other."
-  },
-
-  {
-    title:"Play Arena Battle",
-    area:"Sarjapur",
-    vibe:"Competitive",
-    happiness:98,
-    emoji:"🎯",
-    description:"Bowling, laser tag, arcade games, and full chaos mode."
-  },
+{
+  title:"Midnight Ice Cream Ride",
+  area:"Koramangala",
+  vibe:"Cute",
+  happiness:96,
+  emoji:"🍦",
+  description:"Ride around the city hunting for the best midnight ice cream."
+},
 
 
-  {
-    title:"Bowling Night",
-    area:"JP Nagar",
-    vibe:"Playful",
-    happiness:92,
-    emoji:"🎳",
-    description:"Trash talk each other while missing easy bowling shots."
-  }
+{
+  title:"Food Street Feast",
+  area:"HSR Food Street",
+  vibe:"Chaotic Fun",
+  happiness:95,
+  emoji:"🌮",
+  description:"Try momos, desserts, and random street food together."
+},
+
+{
+  title:"Street Food Challenge",
+  area:"HSR Food Street",
+  vibe:"Fun",
+  happiness:89,
+  emoji:"🍜",
+  description:"Each person picks one random food stall for the other."
+},
+
+{
+  title:"Play Arena Battle",
+  area:"Sarjapur",
+  vibe:"Competitive",
+  happiness:98,
+  emoji:"🎯",
+  description:"Bowling, laser tag, arcade games, and full chaos mode."
+},
+
+
+{
+  title:"Bowling Night",
+  area:"JP Nagar",
+  vibe:"Playful",
+  happiness:92,
+  emoji:"🎳",
+  description:"Trash talk each other while missing easy bowling shots."
+}
 ];
 
-    /* RARE EVENTS */
+  /* RARE EVENTS */
 
-    const rareEvents = [
+  const rareEvents = [
 
-      "📵 No Phones Challenge.",
-      "🎧 Shared Playlist Only Night."
+    "📵 No Phones Challenge.",
+    "🎧 Shared Playlist Only Night."
 
-    ];
+  ];
+
 
     const hotspots =
       document.querySelectorAll(".hotspot");
@@ -1103,7 +1065,7 @@ style="top:30%; left:45%;">
       document.getElementById("dateDescription")
         .innerText = data.description;
 
-      /* Happiness */
+      /* HAPPINESS */
 
       const happiness =
         data.happiness;
@@ -1120,7 +1082,7 @@ style="top:30%; left:45%;">
         fill.style.width = happiness + "%";
       },100);
 
-      /* Rare event */
+      /* RARE EVENT */
 
       const rareBox =
         document.getElementById("rareEvent");
@@ -1141,9 +1103,9 @@ style="top:30%; left:45%;">
       resultCard.classList.add("show");
     }
 
-    /* MAIN THROW */
+    /* RESET BOARD */
 
-    function throwDart(){
+    function resetBoard(){
 
       resultCard.classList.remove("show");
 
@@ -1151,7 +1113,23 @@ style="top:30%; left:45%;">
         h.classList.remove("active");
       });
 
-      /* RANDOM HOTSPOT */
+      document.getElementById("happinessFill")
+        .style.width = "0%";
+
+      dart.style.opacity = 0;
+
+      dart.style.left = "170px";
+      dart.style.top = "50%";
+
+      dart.style.transform =
+        "translateY(-50%) rotate(0deg)";
+    }
+
+    /* MAIN THROW */
+
+    function throwDart(){
+
+      resetBoard();
 
       const randomHotspot =
         hotspots[
@@ -1161,8 +1139,6 @@ style="top:30%; left:45%;">
       const area =
         randomHotspot.dataset.area;
 
-      /* RANDOM DATE */
-
       const areaDates =
         dateIdeas.filter(d=>d.area === area);
 
@@ -1171,7 +1147,7 @@ style="top:30%; left:45%;">
           Math.floor(Math.random()*areaDates.length)
         ];
 
-      /* PLAYER THROW */
+      /* PLAYER ANIMATION */
 
       player.classList.remove("throw");
 
@@ -1189,36 +1165,33 @@ style="top:30%; left:45%;">
           .getBoundingClientRect();
 
       const targetX =
-        hotspotRect.left - boardRect.left + 10;
+        hotspotRect.left - boardRect.left;
 
       const targetY =
-        hotspotRect.top - boardRect.top + 10;
+        hotspotRect.top - boardRect.top;
 
       /* SHOW DART */
 
       dart.style.opacity = 1;
 
-      /* ANIMATION */
+      /* DART ANIMATION */
 
       dart.animate(
 
         [
 
           {
-            bottom:"120px",
-            left:"50%",
+            left:"170px",
+            top:"50%",
             transform:
-            "translateX(-50%) rotate(0deg) scale(.7)"
+            "translateY(-50%) rotate(0deg) scale(.7)"
           },
 
           {
-            bottom:
-            (boardRect.height - targetY) + "px",
-
             left:targetX + "px",
-
+            top:targetY + "px",
             transform:
-            "translateX(-50%) rotate(720deg) scale(1)"
+            "translateY(-50%) rotate(720deg) scale(1)"
           }
 
         ],
@@ -1254,48 +1227,10 @@ style="top:30%; left:45%;">
       throwDart
     );
 
-    /* RESET GAME */
-
-function resetBoard(){
-
-/* Hide result card */
-
-resultCard.classList.remove("show");
-
-/* Remove active hotspot */
-
-hotspots.forEach(h=>{
-  h.classList.remove("active");
-});
-
-/* Reset happiness bar */
-
-document.getElementById("happinessFill")
-  .style.width = "0%";
-
-/* Reset dart */
-
-dart.style.opacity = 0;
-
-dart.style.left = "50%";
-dart.style.bottom = "120px";
-
-dart.style.transform =
-  "translateX(-50%) rotate(0deg)";
-
-}
-
-/* EVENTS */
-
-throwBtn.addEventListener(
-"click",
-throwDart
-);
-
-againBtn.addEventListener(
-"click",
-resetBoard
-);
+    againBtn.addEventListener(
+      "click",
+      resetBoard
+    );
 
   </script>
 
