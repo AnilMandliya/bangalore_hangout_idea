@@ -1,0 +1,1303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bengaluru Hangout Dart</title>
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    :root{
+      --pink:#ff4fd8;
+      --purple:#8b5cf6;
+      --cyan:#39f3ff;
+      --bg:#050510;
+    }
+
+    body{
+      min-height:100vh;
+      overflow:hidden;
+
+      font-family:Arial, Helvetica, sans-serif;
+
+      background:
+      radial-gradient(circle at top left,#7c3aed 0%,transparent 30%),
+      radial-gradient(circle at bottom right,#0ea5e9 0%,transparent 30%),
+      var(--bg);
+
+      color:white;
+      position:relative;
+    }
+
+    /* RAIN EFFECT */
+
+    body::before{
+      content:"";
+      position:absolute;
+      inset:0;
+
+      background-image:
+      linear-gradient(
+        transparent 0%,
+        rgba(255,255,255,.08) 50%,
+        transparent 100%
+      );
+
+      background-size:3px 60px;
+
+      animation:rain .35s linear infinite;
+
+      opacity:.18;
+      pointer-events:none;
+    }
+
+    @keyframes rain{
+
+      from{
+        transform:translateY(-100px);
+      }
+
+      to{
+        transform:translateY(100px);
+      }
+    }
+
+    /* PARTICLES */
+
+    .particles{
+      position:absolute;
+      inset:0;
+      overflow:hidden;
+      z-index:0;
+    }
+
+    .particle{
+      position:absolute;
+
+      width:6px;
+      height:6px;
+
+      border-radius:50%;
+
+      background:var(--cyan);
+
+      opacity:.4;
+
+      animation:float linear infinite;
+    }
+
+    @keyframes float{
+
+      from{
+        transform:translateY(100vh) scale(0);
+      }
+
+      to{
+        transform:translateY(-10vh) scale(1.5);
+      }
+    }
+
+    .container{
+      position:relative;
+      z-index:5;
+
+      width:100%;
+      min-height:100vh;
+
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+
+      padding:20px;
+    }
+
+    /* HEADER */
+
+    .title{
+      text-align:center;
+      margin-bottom:30px;
+    }
+
+    .title h1{
+      font-size:clamp(2rem,5vw,4rem);
+
+      color:var(--pink);
+
+      text-shadow:
+      0 0 10px var(--pink),
+      0 0 30px var(--pink),
+      0 0 60px var(--purple);
+
+      animation:glow 2s infinite alternate;
+    }
+
+    .title p{
+      margin-top:12px;
+      color:#d1d5db;
+      letter-spacing:1px;
+    }
+
+    @keyframes glow{
+
+      from{
+        text-shadow:
+        0 0 10px var(--pink),
+        0 0 25px var(--pink);
+      }
+
+      to{
+        text-shadow:
+        0 0 20px var(--pink),
+        0 0 50px var(--purple),
+        0 0 90px var(--cyan);
+      }
+    }
+
+    /* GAME BOARD */
+
+    .game-board{
+      position:relative;
+
+      width:min(90vw,650px);
+      height:min(90vw,650px);
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      margin-bottom:30px;
+    }
+
+    .ring{
+      position:absolute;
+      border-radius:50%;
+      border:1px solid rgba(255,255,255,.08);
+    }
+
+    .ring1{
+      width:100%;
+      height:100%;
+    }
+
+    .ring2{
+      width:80%;
+      height:80%;
+    }
+
+    .ring3{
+      width:60%;
+      height:60%;
+    }
+
+    /* MAP */
+
+    .map{
+      position:relative;
+
+      width:75%;
+      height:75%;
+
+      border-radius:
+      42% 58% 63% 37% /
+      35% 39% 61% 65%;
+
+      background:
+      linear-gradient(
+        145deg,
+        rgba(255,255,255,.12),
+        rgba(255,255,255,.03)
+      );
+
+      border:1px solid rgba(255,255,255,.12);
+
+      backdrop-filter:blur(10px);
+
+      overflow:hidden;
+
+      box-shadow:
+      0 0 35px rgba(57,243,255,.25),
+      inset 0 0 25px rgba(255,255,255,.05);
+    }
+
+    .map::before{
+      content:"";
+      position:absolute;
+      inset:0;
+
+      background:
+      radial-gradient(circle at 30% 30%, rgba(255,79,216,.2), transparent 30%),
+      radial-gradient(circle at 70% 70%, rgba(57,243,255,.2), transparent 30%);
+
+      animation:gradientMove 6s infinite alternate;
+    }
+
+    @keyframes gradientMove{
+
+      from{
+        transform:translate(-10px,-10px);
+      }
+
+      to{
+        transform:translate(10px,10px);
+      }
+    }
+
+    /* HOTSPOTS */
+
+    .hotspot{
+      position:absolute;
+
+      width:22px;
+      height:22px;
+
+      border-radius:50%;
+
+      background:var(--cyan);
+
+      transform:translate(-50%,-50%);
+
+      cursor:pointer;
+
+      animation:pulse 2s infinite;
+
+      box-shadow:0 0 20px var(--cyan);
+
+      transition:.3s;
+    }
+
+    .hotspot:hover{
+      transform:translate(-50%,-50%) scale(1.4);
+
+      background:var(--pink);
+
+      box-shadow:0 0 40px var(--pink);
+    }
+
+    .hotspot.active{
+      background:var(--pink);
+
+      transform:translate(-50%,-50%) scale(1.8);
+
+      box-shadow:
+      0 0 20px var(--pink),
+      0 0 60px var(--pink),
+      0 0 120px var(--purple);
+    }
+
+    @keyframes pulse{
+
+      0%{
+        box-shadow:0 0 0 0 rgba(57,243,255,.7);
+      }
+
+      70%{
+        box-shadow:0 0 0 20px rgba(57,243,255,0);
+      }
+
+      100%{
+        box-shadow:0 0 0 0 rgba(57,243,255,0);
+      }
+    }
+
+    .label{
+      position:absolute;
+
+      left:50%;
+      transform:translateX(-50%);
+
+      margin-top:22px;
+
+      font-size:.72rem;
+      white-space:nowrap;
+
+      color:white;
+      opacity:.85;
+    }
+
+    /* PLAYER */
+
+    .player{
+      position:absolute;
+
+      bottom:-10px;
+      left:50%;
+
+      transform:translateX(-50%);
+
+      width:120px;
+      height:160px;
+
+      z-index:20;
+      pointer-events:none;
+    }
+
+    .body{
+      position:absolute;
+
+      bottom:0;
+      left:50%;
+
+      transform:translateX(-50%);
+
+      width:70px;
+      height:110px;
+
+      border-radius:30px 30px 15px 15px;
+
+      background:
+      linear-gradient(
+        180deg,
+        #111827,
+        #0f172a
+      );
+
+      border:2px solid rgba(255,255,255,.1);
+
+      box-shadow:
+      0 0 20px rgba(57,243,255,.25),
+      inset 0 0 20px rgba(255,255,255,.05);
+    }
+
+    .body::before{
+      content:"";
+
+      position:absolute;
+
+      top:-42px;
+      left:50%;
+
+      transform:translateX(-50%);
+
+      width:42px;
+      height:42px;
+
+      border-radius:50%;
+
+      background:#f5d0c5;
+    }
+
+    .arm{
+      position:absolute;
+
+      top:35px;
+      right:5px;
+
+      width:65px;
+      height:12px;
+
+      border-radius:20px;
+
+      background:#f5d0c5;
+
+      transform-origin:left center;
+      transform:rotate(-20deg);
+
+      box-shadow:0 0 10px rgba(255,255,255,.2);
+    }
+
+    .player.throw .arm{
+      animation:throwArm .8s ease;
+    }
+
+    @keyframes throwArm{
+
+      0%{
+        transform:rotate(-20deg);
+      }
+
+      35%{
+        transform:rotate(-120deg);
+      }
+
+      100%{
+        transform:rotate(15deg);
+      }
+    }
+
+    /* DART */
+
+    .dart{
+      position:absolute;
+
+      bottom:120px;
+      left:50%;
+
+      transform:translateX(-50%);
+
+      font-size:46px;
+
+      opacity:0;
+
+      z-index:30;
+
+      filter:
+      drop-shadow(0 0 12px rgba(255,255,255,.9))
+      drop-shadow(0 0 25px rgba(255,79,216,.7));
+    }
+
+    /* RIPPLE */
+
+    .ripple{
+      position:absolute;
+
+      width:20px;
+      height:20px;
+
+      border-radius:50%;
+
+      border:2px solid var(--pink);
+
+      transform:translate(-50%,-50%);
+
+      animation:ripple .7s ease-out forwards;
+
+      pointer-events:none;
+    }
+
+    @keyframes ripple{
+
+      from{
+        opacity:1;
+        transform:translate(-50%,-50%) scale(.5);
+      }
+
+      to{
+        opacity:0;
+        transform:translate(-50%,-50%) scale(5);
+      }
+    }
+
+    /* BUTTON */
+
+    .throw-btn{
+      border:none;
+      outline:none;
+
+      padding:18px 44px;
+
+      border-radius:999px;
+
+      background:
+      linear-gradient(
+        135deg,
+        var(--pink),
+        var(--purple)
+      );
+
+      color:white;
+
+      font-size:1rem;
+      font-weight:bold;
+      letter-spacing:2px;
+
+      cursor:pointer;
+
+      position:relative;
+      overflow:hidden;
+
+      box-shadow:
+      0 0 20px rgba(255,79,216,.5),
+      0 0 50px rgba(139,92,246,.3);
+
+      transition:.25s;
+    }
+
+    .throw-btn::before{
+      content:"";
+
+      position:absolute;
+      inset:0;
+
+      background:
+      linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.3),
+        transparent
+      );
+
+      transform:translateX(-100%);
+    }
+
+    .throw-btn:hover::before{
+      animation:shine 1s linear;
+    }
+
+    @keyframes shine{
+
+      to{
+        transform:translateX(100%);
+      }
+    }
+
+    .throw-btn:hover{
+      transform:scale(1.08);
+
+      box-shadow:
+      0 0 30px rgba(255,79,216,.8),
+      0 0 80px rgba(57,243,255,.35);
+    }
+
+    /* RESULT CARD */
+
+    .card{
+      position:fixed;
+
+      width:min(90vw,420px);
+
+      background:rgba(255,255,255,.08);
+
+      border:1px solid rgba(255,255,255,.15);
+
+      backdrop-filter:blur(18px);
+
+      border-radius:28px;
+
+      padding:28px;
+
+      bottom:-500px;
+      left:50%;
+
+      transform:translateX(-50%);
+
+      z-index:100;
+
+      box-shadow:
+      0 0 40px rgba(255,79,216,.25);
+
+      transition:1s cubic-bezier(.16,1,.3,1);
+    }
+
+    .card.show{
+      bottom:30px;
+    }
+
+    .emoji{
+      font-size:3rem;
+      margin-bottom:10px;
+    }
+
+    .card h2{
+      color:var(--pink);
+      margin-bottom:12px;
+      font-size:1.8rem;
+    }
+
+    .meta{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+
+      margin:15px 0;
+    }
+
+    .tag{
+      padding:8px 14px;
+
+      border-radius:999px;
+
+      background:rgba(255,255,255,.08);
+
+      border:1px solid rgba(255,255,255,.08);
+
+      font-size:.85rem;
+    }
+
+    /* HAPPINESS METER */
+
+    .happiness-section{
+      margin-top:18px;
+    }
+
+    .happiness-header{
+      display:flex;
+      justify-content:space-between;
+
+      margin-bottom:10px;
+
+      font-size:.95rem;
+    }
+
+    .happiness-bar{
+      width:100%;
+      height:16px;
+
+      border-radius:999px;
+
+      background:rgba(255,255,255,.08);
+
+      overflow:hidden;
+
+      border:1px solid rgba(255,255,255,.08);
+
+      box-shadow:
+      inset 0 0 10px rgba(255,255,255,.05);
+    }
+
+    .happiness-fill{
+      height:100%;
+      width:0%;
+
+      border-radius:999px;
+
+      background:
+      linear-gradient(
+        90deg,
+        #ff4fd8,
+        #8b5cf6,
+        #39f3ff
+      );
+
+      box-shadow:
+      0 0 20px rgba(255,79,216,.8),
+      0 0 40px rgba(57,243,255,.5);
+
+      transition:width 1s cubic-bezier(.16,1,.3,1);
+    }
+
+    .card p{
+      line-height:1.7;
+      color:#e5e7eb;
+      margin-top:18px;
+    }
+
+    .card-buttons{
+      display:flex;
+      gap:12px;
+
+      margin-top:20px;
+    }
+
+    .small-btn{
+      flex:1;
+
+      border:none;
+
+      border-radius:14px;
+
+      padding:14px;
+
+      cursor:pointer;
+
+      font-weight:bold;
+
+      transition:.25s;
+    }
+
+    .again{
+      background:var(--purple);
+      color:white;
+    }
+
+    .fun{
+      background:var(--cyan);
+      color:black;
+    }
+
+    .small-btn:hover{
+      transform:translateY(-2px) scale(1.03);
+    }
+
+    /* RARE EVENT */
+
+    .rare{
+      margin-top:16px;
+
+      padding:14px;
+
+      border-radius:18px;
+
+      background:rgba(255,79,216,.12);
+
+      border:1px solid rgba(255,79,216,.25);
+
+      animation:rareGlow 1.5s infinite alternate;
+    }
+
+    @keyframes rareGlow{
+
+      from{
+        box-shadow:0 0 10px rgba(255,79,216,.2);
+      }
+
+      to{
+        box-shadow:0 0 30px rgba(255,79,216,.6);
+      }
+    }
+
+    /* MOBILE */
+
+    @media(max-width:768px){
+
+      .game-board{
+        width:95vw;
+        height:95vw;
+      }
+
+      .throw-btn{
+        width:90%;
+      }
+
+      .card{
+        padding:22px;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="particles" id="particles"></div>
+
+  <div class="container">
+
+    <!-- HEADER -->
+
+    <div class="title">
+      <h1>Bengaluru Hangout Dart</h1>
+      <p>Let the city decide our next hangout place.</p>
+    </div>
+
+    <!-- GAME BOARD -->
+
+    <div class="game-board">
+
+      <div class="ring ring1"></div>
+      <div class="ring ring2"></div>
+      <div class="ring ring3"></div>
+
+      <!-- MAP -->
+
+      <div class="map" id="map">
+
+        <!-- HOTSPOTS -->
+
+<div class="hotspot"
+data-area="Koramangala"
+style="top:55%; left:40%;">
+<div class="label">Koramangala</div>
+</div>
+
+<div class="hotspot"
+data-area="Indiranagar"
+style="top:35%; left:65%;">
+<div class="label">Indiranagar</div>
+</div>
+
+<div class="hotspot"
+data-area="HSR Food Street"
+style="top:72%; left:52%;">
+<div class="label">HSR Food Street</div>
+</div>
+
+<div class="hotspot"
+data-area="MG Road"
+style="top:48%; left:72%;">
+<div class="label">MG Road</div>
+</div>
+
+<div class="hotspot"
+data-area="Church Street"
+style="top:42%; left:56%;">
+<div class="label">Church Street</div>
+</div>
+
+<div class="hotspot"
+data-area="JP Nagar"
+style="top:68%; left:28%;">
+<div class="label">JP Nagar</div>
+</div>
+
+<div class="hotspot"
+data-area="Sarjapur"
+style="top:64%; left:76%;">
+<div class="label">Sarjapur</div>
+</div>
+
+<div class="hotspot"
+data-area="Cubbon Park"
+style="top:30%; left:45%;">
+<div class="label">Cubbon Park</div>
+</div>
+
+      </div>
+
+      <!-- PLAYER -->
+
+      <div class="player" id="player">
+        <div class="arm"></div>
+        <div class="body"></div>
+      </div>
+
+      <!-- DART -->
+
+      <div class="dart" id="dart">🎯</div>
+
+    </div>
+
+    <!-- BUTTON -->
+
+    <button class="throw-btn" id="throwBtn">
+      SHOOT
+    </button>
+
+  </div>
+
+  <!-- RESULT CARD -->
+
+  <div class="card" id="resultCard">
+
+    <div class="emoji" id="emoji">☕</div>
+
+    <h2 id="dateTitle"></h2>
+
+    <div class="meta">
+      <div class="tag" id="dateArea"></div>
+      <div class="tag" id="dateVibe"></div>
+    </div>
+
+    <!-- HAPPINESS -->
+
+    <div class="happiness-section">
+
+      <div class="happiness-header">
+        <span>💖 Happiness Meter</span>
+        <span id="happinessValue">95%</span>
+      </div>
+
+      <div class="happiness-bar">
+        <div class="happiness-fill"
+          id="happinessFill">
+        </div>
+      </div>
+
+    </div>
+
+    <p id="dateDescription"></p>
+
+    <div id="rareEvent"></div>
+
+    <div class="card-buttons">
+
+      <button class="small-btn again"
+        id="againBtn">
+        Shoot Again
+      </button>
+
+      <button class="small-btn fun">
+        Sounds Fun ✨
+      </button>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    /* DATE IDEAS */
+
+    const dateIdeas = [
+
+  {
+    title:"Dessert Crawl",
+    area:"Indiranagar",
+    vibe:"Sweet",
+    happiness:94,
+    emoji:"🍰",
+    description:"Try multiple dessert spots and rate them like food critics."
+  },
+
+  {
+    title:"Bookstore Hangout",
+    area:"Church Street",
+    vibe:"Soft",
+    happiness:88,
+    emoji:"📚",
+    description:"Pick books for each other and judge covers dramatically."
+  },
+
+  {
+    title:"Mini Photoshoot Walk",
+    area:"Church Street",
+    vibe:"Aesthetic",
+    happiness:90,
+    emoji:"📸",
+    description:"Take candid  photos while walking"
+  },
+
+  {
+    title:"Sunset Walk",
+    area:"Cubbon Park",
+    vibe:"Peaceful",
+    happiness:97,
+    emoji:"🌇",
+    description:"Slow walk under giant trees with chai in hand."
+  },
+
+  {
+    title:"Chai & Deep Talks",
+    area:"Cubbon Park",
+    vibe:"Wholesome",
+    happiness:93,
+    emoji:"🍵",
+    description:"Sit under the trees and talk about life, dreams, and random nonsense."
+  },
+
+  {
+    title:"Metro Adventure",
+    area:"MG Road",
+    vibe:"Spontaneous",
+    happiness:85,
+    emoji:"🚇",
+    description:"Take random metro stops and explore together."
+  },
+
+  {
+    title:"Midnight Ice Cream Ride",
+    area:"Koramangala",
+    vibe:"Cute",
+    happiness:96,
+    emoji:"🍦",
+    description:"Ride around the city hunting for the best midnight ice cream."
+  },
+
+
+  {
+    title:"Food Street Feast",
+    area:"HSR Food Street",
+    vibe:"Chaotic Fun",
+    happiness:95,
+    emoji:"🌮",
+    description:"Try momos, desserts, and random street food together."
+  },
+
+  {
+    title:"Street Food Challenge",
+    area:"HSR Food Street",
+    vibe:"Fun",
+    happiness:89,
+    emoji:"🍜",
+    description:"Each person picks one random food stall for the other."
+  },
+
+  {
+    title:"Play Arena Battle",
+    area:"Sarjapur",
+    vibe:"Competitive",
+    happiness:98,
+    emoji:"🎯",
+    description:"Bowling, laser tag, arcade games, and full chaos mode."
+  },
+
+
+  {
+    title:"Bowling Night",
+    area:"JP Nagar",
+    vibe:"Playful",
+    happiness:92,
+    emoji:"🎳",
+    description:"Trash talk each other while missing easy bowling shots."
+  }
+];
+
+    /* RARE EVENTS */
+
+    const rareEvents = [
+
+      "📵 No Phones Challenge.",
+      "🎧 Shared Playlist Only Night."
+
+    ];
+
+    const hotspots =
+      document.querySelectorAll(".hotspot");
+
+    const throwBtn =
+      document.getElementById("throwBtn");
+
+    const againBtn =
+      document.getElementById("againBtn");
+
+    const resultCard =
+      document.getElementById("resultCard");
+
+    const dart =
+      document.getElementById("dart");
+
+    const player =
+      document.getElementById("player");
+
+    /* PARTICLES */
+
+    function createParticles(){
+
+      const container =
+        document.getElementById("particles");
+
+      for(let i=0;i<40;i++){
+
+        const p =
+          document.createElement("div");
+
+        p.classList.add("particle");
+
+        p.style.left =
+          Math.random()*100 + "%";
+
+        p.style.animationDuration =
+          (5 + Math.random()*10) + "s";
+
+        p.style.animationDelay =
+          Math.random()*5 + "s";
+
+        container.appendChild(p);
+      }
+    }
+
+    createParticles();
+
+    /* RIPPLE */
+
+    function createRipple(x,y){
+
+      const ripple =
+        document.createElement("div");
+
+      ripple.classList.add("ripple");
+
+      ripple.style.left = x + "px";
+      ripple.style.top = y + "px";
+
+      document.getElementById("map")
+        .appendChild(ripple);
+
+      setTimeout(()=>{
+        ripple.remove();
+      },700);
+    }
+
+    /* SHOW CARD */
+
+    function showCard(data){
+
+      document.getElementById("emoji")
+        .innerText = data.emoji;
+
+      document.getElementById("dateTitle")
+        .innerText = data.title;
+
+      document.getElementById("dateArea")
+        .innerText = "📍 " + data.area;
+
+      document.getElementById("dateVibe")
+        .innerText = "✨ " + data.vibe;
+
+      document.getElementById("dateDescription")
+        .innerText = data.description;
+
+      /* Happiness */
+
+      const happiness =
+        data.happiness;
+
+      document.getElementById("happinessValue")
+        .innerText = happiness + "%";
+
+      const fill =
+        document.getElementById("happinessFill");
+
+      fill.style.width = "0%";
+
+      setTimeout(()=>{
+        fill.style.width = happiness + "%";
+      },100);
+
+      /* Rare event */
+
+      const rareBox =
+        document.getElementById("rareEvent");
+
+      rareBox.innerHTML = "";
+
+      if(Math.random() < 0.28){
+
+        const rare =
+          rareEvents[
+            Math.floor(Math.random()*rareEvents.length)
+          ];
+
+        rareBox.innerHTML =
+          `<div class="rare">${rare}</div>`;
+      }
+
+      resultCard.classList.add("show");
+    }
+
+    /* MAIN THROW */
+
+    function throwDart(){
+
+      resultCard.classList.remove("show");
+
+      hotspots.forEach(h=>{
+        h.classList.remove("active");
+      });
+
+      /* RANDOM HOTSPOT */
+
+      const randomHotspot =
+        hotspots[
+          Math.floor(Math.random()*hotspots.length)
+        ];
+
+      const area =
+        randomHotspot.dataset.area;
+
+      /* RANDOM DATE */
+
+      const areaDates =
+        dateIdeas.filter(d=>d.area === area);
+
+      const chosenDate =
+        areaDates[
+          Math.floor(Math.random()*areaDates.length)
+        ];
+
+      /* PLAYER THROW */
+
+      player.classList.remove("throw");
+
+      void player.offsetWidth;
+
+      player.classList.add("throw");
+
+      /* TARGET */
+
+      const hotspotRect =
+        randomHotspot.getBoundingClientRect();
+
+      const boardRect =
+        document.querySelector(".game-board")
+          .getBoundingClientRect();
+
+      const targetX =
+        hotspotRect.left - boardRect.left + 10;
+
+      const targetY =
+        hotspotRect.top - boardRect.top + 10;
+
+      /* SHOW DART */
+
+      dart.style.opacity = 1;
+
+      /* ANIMATION */
+
+      dart.animate(
+
+        [
+
+          {
+            bottom:"120px",
+            left:"50%",
+            transform:
+            "translateX(-50%) rotate(0deg) scale(.7)"
+          },
+
+          {
+            bottom:
+            (boardRect.height - targetY) + "px",
+
+            left:targetX + "px",
+
+            transform:
+            "translateX(-50%) rotate(720deg) scale(1)"
+          }
+
+        ],
+
+        {
+          duration:1100,
+          easing:"cubic-bezier(.2,.8,.2,1)",
+          fill:"forwards"
+        }
+
+      );
+
+      /* IMPACT */
+
+      setTimeout(()=>{
+
+        randomHotspot.classList.add("active");
+
+        createRipple(
+          randomHotspot.offsetLeft,
+          randomHotspot.offsetTop
+        );
+
+        showCard(chosenDate);
+
+      },1100);
+    }
+
+    /* EVENTS */
+
+    throwBtn.addEventListener(
+      "click",
+      throwDart
+    );
+
+    /* RESET GAME */
+
+function resetBoard(){
+
+/* Hide result card */
+
+resultCard.classList.remove("show");
+
+/* Remove active hotspot */
+
+hotspots.forEach(h=>{
+  h.classList.remove("active");
+});
+
+/* Reset happiness bar */
+
+document.getElementById("happinessFill")
+  .style.width = "0%";
+
+/* Reset dart */
+
+dart.style.opacity = 0;
+
+dart.style.left = "50%";
+dart.style.bottom = "120px";
+
+dart.style.transform =
+  "translateX(-50%) rotate(0deg)";
+
+}
+
+/* EVENTS */
+
+throwBtn.addEventListener(
+"click",
+throwDart
+);
+
+againBtn.addEventListener(
+"click",
+resetBoard
+);
+
+  </script>
+
+</body>
+</html>
